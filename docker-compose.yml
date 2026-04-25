@@ -1,9 +1,7 @@
-version: "3.9"
-
 services:
 
   postgres:
-    image: postgres:16
+    image: postgres:16-alpine
     container_name: guardian-postgres
     restart: unless-stopped
     environment:
@@ -22,7 +20,7 @@ services:
       retries: 5
 
   neo4j:
-    image: neo4j:5.26-community
+    image: neo4j:latest
     container_name: guardian-neo4j
     restart: unless-stopped
     environment:
@@ -58,33 +56,8 @@ services:
       timeout: 5s
       retries: 5
 
-  n8n:
-    image: n8nio/n8n:latest
-    container_name: guardian-n8n
-    restart: unless-stopped
-    environment:
-      N8N_BASIC_AUTH_ACTIVE: "true"
-      N8N_BASIC_AUTH_USER: ${N8N_BASIC_AUTH_USER}
-      N8N_BASIC_AUTH_PASSWORD: ${N8N_BASIC_AUTH_PASSWORD}
-      N8N_HOST: localhost
-      N8N_PORT: ${N8N_PORT:-5678}
-      N8N_PROTOCOL: http
-      WEBHOOK_URL: http://localhost:${N8N_PORT:-5678}/
-      GENERIC_TIMEZONE: Europe/Madrid
-    ports:
-      - "${N8N_PORT:-5678}:5678"
-    volumes:
-      - n8n_data:/home/node/.n8n
-      - ./infra/n8n:/backup
-    healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:5678/healthz || exit 1"]
-      interval: 15s
-      timeout: 10s
-      retries: 5
-
 volumes:
   postgres_data:
   neo4j_data:
   neo4j_logs:
   qdrant_data:
-  n8n_data:
