@@ -39,16 +39,16 @@ DIAGNOSES = [
 ]
 
 MEDICATIONS = [
-    {"code": "372665008", "display": "Warfarin sodium 5mg",       "atc": "B01AA03"},
-    {"code": "372687004", "display": "Metformin hydrochloride 850mg", "atc": "A10BA02"},
-    {"code": "386871004", "display": "Digoxin 125mcg",            "atc": "C01AA05"},
-    {"code": "372756006", "display": "Lisinopril 10mg",           "atc": "C09AA03"},
-    {"code": "372571008", "display": "Atorvastatin 40mg",         "atc": "C10AA05"},
-    {"code": "387207008", "display": "Ibuprofen 400mg",           "atc": "M01AE01"},
-    {"code": "372687004", "display": "Amlodipine 5mg",            "atc": "C08CA01"},
-    {"code": "386849001", "display": "Omeprazole 20mg",           "atc": "A02BC01"},
-    {"code": "372687004", "display": "Salbutamol 100mcg inhaler", "atc": "R03AC02"},
-    {"code": "387207008", "display": "Sertraline 50mg",           "atc": "N06AB06"},
+    {"code": "372665008", "display": "Warfarin sodium 5mg",          "atc": "B01AA03"},
+    {"code": "372687004", "display": "Metformin hydrochloride 850mg","atc": "A10BA02"},
+    {"code": "386871004", "display": "Digoxin 125mcg",               "atc": "C01AA05"},
+    {"code": "372756006", "display": "Lisinopril 10mg",              "atc": "C09AA03"},
+    {"code": "372571008", "display": "Atorvastatin 40mg",            "atc": "C10AA05"},
+    {"code": "387207008", "display": "Ibuprofen 400mg",              "atc": "M01AE01"},
+    {"code": "386864001", "display": "Amlodipine 5mg",               "atc": "C08CA01"},
+    {"code": "386849001", "display": "Omeprazole 20mg",              "atc": "A02BC01"},
+    {"code": "372897005", "display": "Salbutamol 100mcg inhaler",    "atc": "R03AC02"},
+    {"code": "372594008", "display": "Sertraline 50mg",              "atc": "N06AB06"},
 ]
 
 LAB_TESTS = {
@@ -227,7 +227,7 @@ def build_patient_bundle(idx: int) -> dict:
             "intent": "order",
             "medicationCodeableConcept": {
                 "coding": [{"system": "http://snomed.info/sct",
-                             "code": "372665008", "display": "Digoxin 125mcg"}],
+                             "code": "386871004", "display": "Digoxin 125mcg"}],
                 "text": "Digoxin 125mcg",
             },
             "subject": {"reference": f"Patient/{patient_id}"},
