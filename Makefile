@@ -138,3 +138,7 @@ reset:
 	@read -p "Are you sure? [y/N] " confirm && [ "$$confirm" = "y" ] || exit 1
 	$(COMPOSE) down -v
 	@echo "All volumes removed."
+
+seed:
+	PYTHONPATH=. $(PYTHON) data/seed/generate_synthetic_fhir.py
+	PYTHONPATH=. $(PYTHON) data/seed/load_fhir_to_graph.py
