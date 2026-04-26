@@ -123,6 +123,8 @@ def assess_consumer(ready_event: threading.Event,
     from src.modules.assess.crew import run_assess
 
     handler_done = threading.Event()
+    signals_expected = [0]   # total signals in this batch (from signal_count in payload)
+    signals_processed = [0]  # incremented after each signal is fully processed
 
     def handle_signal(envelope: dict):
         try:
