@@ -51,13 +51,41 @@ services:
     volumes:
       - qdrant_data:/qdrant/storage
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:6333/healthz || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      disable: true
+
+  solace:
+    image: solace/solace-pubsub-standard:latest
+    container_name: guardian-solace
+    restart: unless-stopped
+    environment:
+      username_admin_globalaccesslevel: admin
+      username_admin_password: ${SOLACE_ADMIN_PASSWORD:-guardian-solace-1234}
+      system_scaling_maxconnectioncount: 100
+    ports:
+      - "8080:8080"
+      - "55555:55555"
+      - "8008:8008"
+      - "1883:1883"
+      - "5672:5672"
+    volumes:
+      - solace_data:/var/lib/solace
+    shm_size: 1g
+    ulimits:
+      core:
+        soft: 1
+        hard: 1
+      nofile:
+        soft: 1048576
+        hard: 1048576
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
 
 volumes:
   postgres_data:
   neo4j_data:
   neo4j_logs:
   qdrant_data:
+  solace_data:

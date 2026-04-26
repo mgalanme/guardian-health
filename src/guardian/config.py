@@ -46,6 +46,12 @@ class Settings(BaseSettings):
     # Vector store selector
     vector_store: str = "qdrant"
 
+    # Solace
+    solace_host: str = "localhost"
+    solace_smf_port: int = 55555
+    solace_mqtt_port: int = 1883
+    solace_admin_password: str = Field(default="guardian-solace-1234")
+
     # FastAPI
     api_host: str = "0.0.0.0"
     api_port: int = 8000
