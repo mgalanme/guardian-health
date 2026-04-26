@@ -74,7 +74,7 @@ def vigil_producer(his_patient_id: str, centre_id: str = "centre-a") -> dict:
         return state
 
     with GuardianMessaging() as msg:
-        for signal in state["raw_signals"]:
+        for i, signal in enumerate(state["raw_signals"]):
             topic = Topics.signal_raw(centre_id, state["patient_pseudo_id"])
             msg.publish(
                 topic_str=topic,
@@ -132,9 +132,13 @@ def assess_consumer(ready_event: threading.Event,
             session_alias = payload.get("session_alias", "")
             signal = payload.get("signal", {})
 
+            total = payload.get("signal_count", 1)
+            signals_expected[0] = total
             log.info("bus.assess.received",
                      session_id=session_id[:8],
-                     pattern=signal.get("raw_data", {}).get("pattern", ""))
+                     pattern=signal.get("raw_data", {}).get("pattern", ""),
+                     signal_index=payload.get("signal_index", 0),
+                     signal_count=total)
 
             state = initial_state(
                 patient_pseudo_id=pseudo_id,
@@ -195,7 +199,11 @@ def assess_consumer(ready_event: threading.Event,
         except Exception as e:
             log.error("bus.assess.handler_error", error=str(e))
         finally:
-            handler_done.set()
+            signals_processed[0] += 1
+            if signals_expected[0] > 0 and signals_processed[0] >= signals_expected[0]:
+                handler_done.set()
+            elif signals_expected[0] == 0:
+                handler_done.set()  # fallback: set if count unknown
 
     service = _make_service()
 
