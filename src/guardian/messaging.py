@@ -182,7 +182,7 @@ class GuardianMessaging:
 
         receiver = (
             self._service.create_direct_message_receiver_builder()
-            .with_subscriptions(TopicSubscription.of(topic_pattern))
+            .with_subscriptions([TopicSubscription.of(topic_pattern)])
             .build()
         )
         receiver.start()
